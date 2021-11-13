@@ -1,6 +1,7 @@
 import streamlit as st
 import data_store
 import data_read
+import data_update
 side_box = st.sidebar.selectbox("Please select your choice", ("upload", "available songs", "listen", "delete", "update"))
 if side_box == "upload":
     with st.form("audio_store"):
@@ -31,5 +32,27 @@ elif side_box == "listen":
     audio = data_read.play_song(id[0])
     st.audio(audio[0], format="audio/mp3")
 
-   
+elif side_box == "update":
+    table_choice = st.selectbox("Please select which table you want to update", ("Artist", "Playlist"))
+    if table_choice == "Artist":
+        with st.form("update_artist_form"):
+            original_name = st.text_input("Please enter the artist name present in the database")
+            update_name = st.text_input("Please enter the artist name which you want to put on database")
+
+            artist_submit = st.form_submit_button("Submit")
+
+            if artist_submit:
+                data_update.update_artist(original_name, update_name)
+    elif table_choice == "Playlist":
+        with st.form("update_playlist_form"):
+            song_name = st.text_input("Please enter the song name you want to update")
+            column_name = st.selectbox("Please select the column you want to update", ("aritst_id", "name"))
+            update_column = st.text_input("The value which you want to put in database")
+
+            playlist_submit = st.form_submit_button("submit")
+            if playlist_submit:
+                data_update.update_playlist(song_name, column_name, update_column)
+
+
+
 
