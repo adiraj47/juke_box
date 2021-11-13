@@ -2,6 +2,7 @@ import streamlit as st
 import data_store
 import data_read
 import data_update
+import data_delete
 side_box = st.sidebar.selectbox("Please select your choice", ("upload", "available songs", "listen", "delete", "update"))
 if side_box == "upload":
     with st.form("audio_store"):
@@ -52,6 +53,27 @@ elif side_box == "update":
             playlist_submit = st.form_submit_button("submit")
             if playlist_submit:
                 data_update.update_playlist(song_name, column_name, update_column)
+elif side_box == "delete":
+
+    table_choice = st.selectbox("Please select which table you want to Delete", ("Artist", "Playlist"))
+    if table_choice == "Artist":
+        with st.form("Delete_artist_form"):
+            name = st.text_input("Please Enter the name of artist")
+
+            delete_artist_submit = st.form_submit_button("Submit")
+
+            if delete_artist_submit:
+                data_delete.delete_artist(name)
+
+    elif table_choice == "Playlist":
+        with st.form("Delete_playlist_form"):
+            song_name = st.text_input("Please enter the song name")
+
+            playlist_delete_submit = st.form_submit_button("Submit")
+            if playlist_delete_submit:
+                data_delete.delete_playlist(song_name)
+
+
 
 
 
