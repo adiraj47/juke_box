@@ -23,9 +23,14 @@ def store_audio(name, file, artist_name):
     cursor = connection.cursor()
     artist_id = store_artist(artist_name)
     st.write(artist_id)
-    cursor.execute("INSERT INTO playlist (name, song, aritst_id) VALUES (?, ?, ?)", (name, file, artist_id))
-    cursor.connection.commit()
-
+    cursor.execute("SELECT name FROM playlist WHERE aritst_id = ? AND name = ?", (artist_id, name))
+    row = cursor.fetchone()
+    if row:
+        st.write("Song already present")
+    else:
+        cursor.execute("INSERT INTO playlist (name, song, aritst_id) VALUES (?, ?, ?)", (name, file, artist_id))
+        st.write(f"song added")
+        cursor.connection.commit()
 
 
 if __name__ == "__main__":
